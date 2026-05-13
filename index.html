@@ -1,0 +1,2159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<title>17.1 Shape and Symmetry</title>
+<style>
+/* BUG FIX #1: @import must be the FIRST rule in <style> — was placed after :root which silently prevented fonts from loading */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
+
+/* ── PERSIAN RUG COLOR PALETTE ── */
+:root {
+  --rug-red:        #8B1A1A;
+  --rug-crimson:    #C0392B;
+  --rug-navy:       #1A2A5E;
+  --rug-blue:       #2563a8;
+  --rug-ivory:      #F5EDD6;
+  --rug-cream:      #FAF3E0;
+  --rug-gold:       #C9963A;
+  --rug-gold-light: #D4A843;
+  --rug-dark:       #3D0A0A;
+  --rug-green:      #2D6A4F;
+  --rug-teal:       #1A5C5A;
+  --rug-field:      #F0E4C4;
+  --rug-text:       #2A0808;
+  --rug-text-soft:  #6B3A20;  /* BUG FIX #2: was #5C2A14 — used consistently for caption text on light bg */
+  --sidebar-w:      240px;
+  --border-ornate:  3px double var(--rug-gold);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  height: 100%;
+  font-size: 16px;
+}
+
+body {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  background-color: #6B0F0F;
+  font-family: 'Crimson Text', Georgia, serif;
+  color: var(--rug-text);
+  overflow: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(45deg, transparent, transparent 14px, rgba(201,150,58,0.07) 14px, rgba(201,150,58,0.07) 15px),
+    repeating-linear-gradient(-45deg, transparent, transparent 14px, rgba(139,26,26,0.07) 14px, rgba(139,26,26,0.07) 15px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ══════════════════════════════════
+   SIDEBAR
+══════════════════════════════════ */
+#sidebar {
+  width: var(--sidebar-w);
+  min-width: var(--sidebar-w);
+  height: 100%;
+  background: linear-gradient(180deg, #2A0505 0%, #3D0808 40%, #150515 100%);
+  border-right: 5px solid var(--rug-gold);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 10;
+  position: relative;
+  flex-shrink: 0;
+}
+
+#sidebar::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image:
+    repeating-linear-gradient(180deg,
+      transparent 0px, transparent 26px,
+      rgba(201,150,58,0.15) 26px, rgba(201,150,58,0.15) 28px);
+  pointer-events: none;
+}
+
+#sidebar::after {
+  content: '';
+  position: absolute;
+  top: 0; right: -5px; width: 5px; bottom: 0;
+  background: repeating-linear-gradient(180deg,
+    var(--rug-gold) 0px, var(--rug-gold) 8px,
+    #8B1A1A 8px, #8B1A1A 16px,
+    #1A2A5E 16px, #1A2A5E 24px,
+    #8B1A1A 24px, #8B1A1A 32px,
+    var(--rug-gold) 32px, var(--rug-gold) 40px);
+  pointer-events: none;
+  z-index: 11;
+}
+
+.sidebar-logo {
+  padding: 20px 16px 12px;
+  text-align: center;
+  border-bottom: 2px solid var(--rug-gold);
+  position: relative;
+}
+
+.sidebar-logo .medallion-top {
+  font-size: 28px;
+  line-height: 1;
+  margin-bottom: 6px;
+  color: var(--rug-gold);
+}
+
+.sidebar-logo h2 {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  color: var(--rug-gold-light);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+.sidebar-logo p {
+  font-size: 10px;
+  color: var(--rug-gold);
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+.sidebar-nav {
+  padding: 12px 8px;
+  flex: 1;
+}
+
+.nav-label {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  color: var(--rug-gold);
+  opacity: 0.6;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 8px 10px 4px;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 12px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: var(--rug-ivory);
+  font-family: 'Crimson Text', serif;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.25s;
+  touch-action: manipulation;
+  margin-bottom: 3px;
+  position: relative;
+}
+
+.nav-btn:hover, .nav-btn.active {
+  background: rgba(201,150,58,0.18);
+  border-color: var(--rug-gold);
+  color: var(--rug-gold-light);
+}
+
+.nav-btn.active::before {
+  content: '◆';
+  position: absolute;
+  left: -2px;
+  color: var(--rug-crimson);
+  font-size: 8px;
+}
+
+/* POLISH: pulse on active nav item */
+.nav-btn.active {
+  animation: navPulse 3s ease-in-out infinite;
+}
+
+@keyframes navPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201,150,58,0); }
+  50% { box-shadow: 0 0 0 3px rgba(201,150,58,0.2); }
+}
+
+.nav-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+/* Students panel */
+.students-panel {
+  padding: 12px 8px;
+  border-top: 2px solid rgba(201,150,58,0.3);
+}
+
+.student-chip {
+  display: inline-block;
+  background: rgba(139,26,26,0.4);
+  border: 1px solid rgba(201,150,58,0.5);
+  border-radius: 20px;
+  padding: 3px 9px;
+  font-size: 11px;
+  color: var(--rug-gold-light);
+  margin: 2px;
+  font-family: 'Crimson Text', serif;
+}
+
+/* ══════════════════════════════════
+   MAIN CONTENT
+══════════════════════════════════ */
+#main {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow-y: scroll;
+  overscroll-behavior-y: contain;
+  scroll-behavior: smooth;
+  background-color: var(--rug-field);
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 38px, rgba(139,26,26,0.045) 38px, rgba(139,26,26,0.045) 39px),
+    repeating-linear-gradient(90deg, transparent, transparent 38px, rgba(139,26,26,0.045) 38px, rgba(139,26,26,0.045) 39px),
+    repeating-linear-gradient(45deg, transparent, transparent 18px, rgba(201,150,58,0.035) 18px, rgba(201,150,58,0.035) 19px),
+    repeating-linear-gradient(-45deg, transparent, transparent 18px, rgba(201,150,58,0.035) 18px, rgba(201,150,58,0.035) 19px);
+  position: relative;
+  z-index: 1;
+  padding-bottom: 120px;
+}
+
+/* ── Section ── */
+.section {
+  display: none;
+  animation: fadeIn 0.4s ease;
+  /* POLISH: scroll-margin so section headers aren't clipped behind top bar */
+  scroll-margin-top: 0;
+}
+.section.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Page Header ── */
+.page-header {
+  background: linear-gradient(180deg, #3D0808 0%, #6B1111 60%, #8B1A1A 100%);
+  border-bottom: 4px solid var(--rug-gold);
+  padding: 24px 32px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.page-header::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 5px;
+  background: repeating-linear-gradient(90deg,
+    var(--rug-gold) 0px, var(--rug-gold) 8px,
+    var(--rug-ivory) 8px, var(--rug-ivory) 12px,
+    var(--rug-navy) 12px, var(--rug-navy) 20px,
+    var(--rug-ivory) 20px, var(--rug-ivory) 24px,
+    var(--rug-gold) 24px, var(--rug-gold) 32px);
+}
+
+.page-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 4px;
+  background: repeating-linear-gradient(90deg,
+    var(--rug-gold) 0px, var(--rug-gold) 8px,
+    #8B1A1A 8px, #8B1A1A 16px,
+    var(--rug-navy) 16px, var(--rug-navy) 24px,
+    #8B1A1A 24px, #8B1A1A 32px,
+    var(--rug-gold) 32px, var(--rug-gold) 40px);
+}
+
+.header-ornament {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.ornament-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--rug-gold), transparent);
+}
+
+.ornament-diamond {
+  color: var(--rug-gold-light);
+  font-size: 14px;
+  text-shadow: 0 0 8px rgba(201,150,58,0.6);
+}
+
+.page-header h1 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(20px, 4vw, 32px);
+  color: var(--rug-gold-light);
+  letter-spacing: 2px;
+  text-shadow: 1px 1px 6px rgba(0,0,0,0.6), 0 0 20px rgba(201,150,58,0.3);
+  margin-bottom: 4px;
+}
+
+.page-header .subtitle {
+  font-size: 13px;
+  color: rgba(245,237,214,0.75);
+  letter-spacing: 1px;
+  font-family: 'Cinzel', serif;
+}
+
+.learning-banner {
+  margin: 20px 24px;
+  background: linear-gradient(135deg, rgba(26,42,94,0.12), rgba(139,26,26,0.08));
+  border: 1px solid rgba(201,150,58,0.5);
+  border-left: 5px solid var(--rug-navy);
+  border-radius: 4px;
+  padding: 16px 20px;
+  position: relative;
+}
+
+.learning-banner::before {
+  content: '◈  We are going to ...';
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  color: var(--rug-navy);
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.learning-banner ul {
+  list-style: none;
+  padding: 0;
+}
+
+.learning-banner li {
+  padding: 4px 0;
+  font-size: 15px;
+  color: var(--rug-text);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.learning-banner li::before {
+  content: '◆';
+  color: var(--rug-crimson);
+  font-size: 10px;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+/* ── Content Cards ── */
+.content-area {
+  padding: 0 24px;
+}
+
+.rug-card {
+  background: linear-gradient(135deg, #FBF0DC 0%, #F5E6C4 100%);
+  border: 2px solid var(--rug-gold);
+  border-radius: 4px;
+  padding: 24px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 3px 12px rgba(139,26,26,0.15), inset 0 0 40px rgba(201,150,58,0.04);
+  outline: 1px solid rgba(201,150,58,0.25);
+  outline-offset: 3px;
+}
+
+.rug-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-image:
+    radial-gradient(ellipse at top left, rgba(201,150,58,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at bottom right, rgba(139,26,26,0.06) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.rug-card::after {
+  content: '✦';
+  position: absolute;
+  top: 8px; right: 12px;
+  color: rgba(201,150,58,0.5);
+  font-size: 16px;
+}
+
+.card-title {
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  color: var(--rug-red);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.card-title::before, .card-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--rug-gold), transparent);
+  max-width: 60px;
+}
+
+.card-body {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--rug-text);
+}
+
+/* ── Vocab Grid ── */
+.vocab-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.vocab-item {
+  background: linear-gradient(135deg, rgba(139,26,26,0.08), rgba(26,42,94,0.08));
+  border: 1px solid rgba(201,150,58,0.5);
+  border-radius: 4px;
+  padding: 14px 12px;
+  text-align: center;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.vocab-item:hover, .vocab-item.revealed {
+  background: linear-gradient(135deg, rgba(139,26,26,0.18), rgba(26,42,94,0.15));
+  border-color: var(--rug-crimson);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(139,26,26,0.15);
+}
+
+.vocab-word {
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  color: var(--rug-red);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.vocab-def {
+  font-size: 12px;
+  color: var(--rug-text);
+  line-height: 1.4;
+  display: none;
+}
+
+.vocab-item.revealed .vocab-def { display: block; }
+
+/* BUG FIX #3: was rgba(201,150,58,0.7) — gold was fine actually */
+.vocab-tap-hint {
+  font-size: 10px;
+  color: var(--rug-gold);
+  margin-top: 4px;
+  opacity: 0.8;
+}
+
+.vocab-item.revealed .vocab-tap-hint { display: none; }
+
+/* ── Symmetry Demo ── */
+.symmetry-demo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.sym-shape-box {
+  background: rgba(240,228,196,0.6);
+  border: 2px solid rgba(201,150,58,0.5);
+  border-radius: 4px;
+  padding: 20px;
+  text-align: center;
+  flex: 1;
+  min-width: 140px;
+  max-width: 200px;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: all 0.3s;
+}
+
+.sym-shape-box:hover, .sym-shape-box.show-line {
+  border-color: var(--rug-crimson);
+  background: rgba(139,26,26,0.08);
+}
+
+.sym-shape-box svg {
+  width: 100px;
+  height: 100px;
+}
+
+.sym-label {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  color: var(--rug-red);
+  margin-top: 8px;
+  letter-spacing: 1px;
+}
+
+.sym-hint {
+  font-size: 11px;
+  /* BUG FIX #4: was rgba(90,40,20,0.5) — slightly boosted opacity for cream bg */
+  color: var(--rug-text-soft);
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+/* direction arrows */
+.direction-demo {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.dir-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 24px;
+  background: rgba(26,42,94,0.08);
+  border: 1px solid rgba(26,42,94,0.35);
+  border-radius: 4px;
+  min-width: 110px;
+}
+
+.dir-arrow {
+  font-size: 36px;
+  line-height: 1;
+  color: var(--rug-navy);
+}
+
+.dir-label {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  color: var(--rug-navy);
+  letter-spacing: 1px;
+}
+
+/* BUG FIX #5: was rgba(245,237,214,0.5) — ivory on cream = invisible */
+.dir-sub {
+  font-size: 12px;
+  color: var(--rug-text-soft);
+  margin-top: 4px;
+}
+
+/* POLISH: improved direction SVG demo */
+.dir-svg-demo {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  margin: 16px 0;
+  flex-wrap: wrap;
+}
+
+.dir-svg-item {
+  text-align: center;
+}
+
+.dir-svg-item svg {
+  display: block;
+  margin: 0 auto 8px;
+}
+
+.dir-svg-label {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  color: var(--rug-navy);
+  letter-spacing: 1px;
+}
+
+/* ══════════════════════════════════
+   SECTION 2 – EXERCISES
+══════════════════════════════════ */
+
+/* POLISH: completion progress bar */
+.exercises-progress {
+  margin: 16px 24px 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.progress-label {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  color: var(--rug-red);
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.progress-track {
+  flex: 1;
+  height: 8px;
+  background: rgba(201,150,58,0.2);
+  border-radius: 20px;
+  border: 1px solid rgba(201,150,58,0.3);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--rug-green), #4ade80);
+  border-radius: 20px;
+  width: 0%;
+  transition: width 0.6s ease;
+}
+
+.progress-count {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  color: var(--rug-green);
+  font-weight: 600;
+  min-width: 36px;
+  text-align: right;
+}
+
+.students-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+  padding: 16px 24px;
+  margin-bottom: 20px;
+}
+
+.student-card {
+  background: linear-gradient(135deg, #FBF0DC 0%, #F5E6C4 100%);
+  border: 2px solid rgba(201,150,58,0.5);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  box-shadow: 0 2px 8px rgba(139,26,26,0.12);
+  outline: 1px solid rgba(201,150,58,0.2);
+  outline-offset: 2px;
+}
+
+.student-card.completed {
+  border-color: var(--rug-green) !important;
+  box-shadow: 0 2px 12px rgba(45,106,79,0.25);
+}
+
+/* POLISH: completed checkmark badge */
+.student-header {
+  background: linear-gradient(90deg, #6B1111 0%, #3D1A5C 100%);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--rug-gold);
+  position: relative;
+}
+
+.student-name {
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  color: var(--rug-gold-light);
+  font-weight: 600;
+}
+
+.student-avatar {
+  width: 34px; height: 34px;
+  background: rgba(201,150,58,0.2);
+  border: 2px solid var(--rug-gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: all 0.3s;
+}
+
+.student-card.completed .student-avatar {
+  background: rgba(45,106,79,0.4);
+  border-color: #4ade80;
+}
+
+.exercise-area {
+  padding: 16px;
+}
+
+.exercise-question {
+  font-size: 14px;
+  color: var(--rug-text);
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+
+.exercise-question strong {
+  color: var(--rug-red);
+}
+
+/* Drawing canvas */
+.draw-canvas-wrap {
+  position: relative;
+  margin: 0 auto 12px;
+  display: block;
+}
+
+.draw-canvas-wrap canvas {
+  display: block;
+  border: 2px solid rgba(201,150,58,0.4);
+  border-radius: 4px;
+  background: rgba(240,228,196,0.4);
+  cursor: crosshair;
+  touch-action: none;
+  width: 100%;
+  max-width: 220px;
+  height: 160px;
+}
+
+.canvas-label {
+  font-size: 11px;
+  /* BUG FIX #6: was rgba(90,42,20,0.5) — boosted to be legible */
+  color: var(--rug-text-soft);
+  text-align: center;
+  margin-bottom: 6px;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 1px;
+}
+
+/* MCQ */
+.mcq-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mcq-btn {
+  background: linear-gradient(135deg, rgba(240,228,196,0.8), rgba(245,237,214,0.9));
+  border: 1px solid rgba(26,42,94,0.3);
+  border-radius: 4px;
+  padding: 10px 14px;
+  color: var(--rug-text);
+  font-family: 'Crimson Text', serif;
+  font-size: 14px;
+  cursor: pointer;
+  touch-action: manipulation;
+  text-align: left;
+  transition: all 0.25s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mcq-btn:hover:not(:disabled) { background: rgba(26,42,94,0.1); border-color: var(--rug-navy); }
+.mcq-btn.correct { background: rgba(45,106,79,0.2); border-color: #2D6A4F; color: #1A4030; }
+.mcq-btn.wrong   { background: rgba(139,26,26,0.15); border-color: var(--rug-crimson); color: #6B0808; }
+
+.mcq-mark { font-size: 16px; color: var(--rug-gold); }
+
+/* Shape selector */
+.shape-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.shape-opt {
+  background: linear-gradient(135deg, rgba(240,228,196,0.8), rgba(245,237,214,0.9));
+  border: 2px solid rgba(26,42,94,0.25);
+  border-radius: 4px;
+  padding: 10px;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: all 0.25s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 70px;
+}
+
+.shape-opt:hover { border-color: var(--rug-gold); }
+.shape-opt.selected { border-color: var(--rug-crimson); background: rgba(139,26,26,0.1); }
+.shape-opt.correct-sel { border-color: #2D6A4F; background: rgba(45,106,79,0.15); }
+.shape-opt.wrong-sel { border-color: var(--rug-crimson); background: rgba(139,26,26,0.15); }
+
+.shape-opt svg { width: 50px; height: 50px; }
+.shape-opt-label { font-size: 11px; color: var(--rug-text-soft); }
+
+.btn-check {
+  margin-top: 12px;
+  width: 100%;
+  padding: 11px;
+  background: linear-gradient(135deg, #8B1A1A, #6B0F0F);
+  border: 1px solid var(--rug-gold);
+  border-radius: 4px;
+  color: var(--rug-ivory);
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: all 0.2s;
+}
+
+.btn-check:hover { background: linear-gradient(135deg, #A82020, #8B1A1A); }
+.btn-check:disabled { opacity: 0.5; cursor: default; }
+
+.canvas-actions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.btn-clear-canvas {
+  flex: 1;
+  background: rgba(139,26,26,0.1);
+  border: 1px solid rgba(201,150,58,0.4);
+  border-radius: 4px;
+  padding: 7px 12px;
+  color: var(--rug-text-soft);
+  font-size: 11px;
+  cursor: pointer;
+  touch-action: manipulation;
+  font-family: 'Crimson Text', serif;
+}
+
+.btn-clear-canvas:hover { background: rgba(139,26,26,0.18); }
+
+.feedback-msg {
+  margin-top: 10px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  display: none;
+  text-align: center;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.5px;
+}
+
+.feedback-msg.success { display: block; background: rgba(45,106,79,0.15); color: #1A4030; border: 1px solid #2D6A4F; }
+.feedback-msg.error   { display: block; background: rgba(139,26,26,0.12); color: #6B0808; border: 1px solid var(--rug-crimson); }
+
+/* ══════════════════════════════════
+   SECTION 3 – QUIZ
+══════════════════════════════════ */
+
+/* POLISH: Quiz welcome screen */
+.quiz-welcome {
+  padding: 40px 24px;
+  text-align: center;
+}
+
+.quiz-welcome-icon {
+  font-size: 56px;
+  margin-bottom: 16px;
+  display: block;
+  animation: bounceIn 0.6s ease;
+}
+
+@keyframes bounceIn {
+  0% { transform: scale(0.5); opacity: 0; }
+  70% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.quiz-welcome h2 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(18px, 4vw, 26px);
+  color: var(--rug-red);
+  margin-bottom: 8px;
+  letter-spacing: 2px;
+}
+
+.quiz-welcome p {
+  font-size: 15px;
+  color: var(--rug-text-soft);
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
+
+.quiz-info-chips {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.quiz-chip {
+  background: rgba(26,42,94,0.08);
+  border: 1px solid rgba(26,42,94,0.3);
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  color: var(--rug-navy);
+  letter-spacing: 1px;
+}
+
+.btn-start-quiz {
+  padding: 16px 44px;
+  background: linear-gradient(135deg, #8B1A1A, #6B0F0F);
+  border: 2px solid var(--rug-gold);
+  border-radius: 4px;
+  color: var(--rug-gold-light);
+  font-family: 'Cinzel', serif;
+  font-size: 15px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: all 0.25s;
+  box-shadow: 0 4px 16px rgba(139,26,26,0.3);
+}
+
+.btn-start-quiz:hover {
+  background: linear-gradient(135deg, #A82020, #8B1A1A);
+  box-shadow: 0 6px 20px rgba(139,26,26,0.45);
+  transform: translateY(-1px);
+}
+
+.quiz-wrap {
+  padding: 0 24px;
+}
+
+.quiz-progress-bar {
+  background: rgba(201,150,58,0.2);
+  border-radius: 20px;
+  height: 8px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(201,150,58,0.3);
+}
+
+.quiz-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--rug-crimson), var(--rug-gold));
+  border-radius: 20px;
+  transition: width 0.5s ease;
+}
+
+.quiz-counter {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  color: var(--rug-red);
+  letter-spacing: 2px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.quiz-card {
+  background: linear-gradient(135deg, #FBF0DC 0%, #F5E6C4 100%);
+  border: 2px solid var(--rug-gold);
+  border-radius: 4px;
+  padding: 28px;
+  margin-bottom: 16px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 3px 14px rgba(139,26,26,0.15);
+  outline: 1px solid rgba(201,150,58,0.25);
+  outline-offset: 3px;
+}
+
+.quiz-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at top, rgba(139,26,26,0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.quiz-q-num {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  color: rgba(139,26,26,0.5);
+  letter-spacing: 3px;
+  margin-bottom: 12px;
+}
+
+.quiz-question {
+  font-size: 18px;
+  color: var(--rug-text);
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.quiz-svg-wrap {
+  margin: 0 auto 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.quiz-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.quiz-opt-btn {
+  padding: 13px 10px;
+  background: linear-gradient(135deg, rgba(240,228,196,0.9), rgba(245,237,214,0.95));
+  border: 2px solid rgba(26,42,94,0.25);
+  border-radius: 4px;
+  color: var(--rug-text);
+  font-family: 'Crimson Text', serif;
+  font-size: 15px;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: all 0.25s;
+  line-height: 1.3;
+}
+
+.quiz-opt-btn:hover:not(:disabled) { background: rgba(26,42,94,0.1); border-color: var(--rug-navy); }
+.quiz-opt-btn.q-correct { background: rgba(45,106,79,0.2); border-color: #2D6A4F; color: #1A4030; }
+.quiz-opt-btn.q-wrong   { background: rgba(139,26,26,0.15); border-color: var(--rug-crimson); color: #6B0808; }
+
+.quiz-feedback {
+  margin-top: 16px;
+  font-size: 15px;
+  min-height: 24px;
+  color: var(--rug-red);
+  font-family: 'Cinzel', serif;
+}
+
+.btn-next-q {
+  margin-top: 16px;
+  padding: 12px 32px;
+  background: linear-gradient(135deg, #1A2A5E, #2A3A7E);
+  border: 1px solid var(--rug-gold);
+  border-radius: 4px;
+  color: var(--rug-gold-light);
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  touch-action: manipulation;
+  display: none;
+  transition: all 0.2s;
+}
+
+.btn-next-q:hover { background: linear-gradient(135deg, #2A3A7E, #1A2A5E); }
+.btn-next-q.visible { display: inline-block; }
+
+/* POLISH: Score board with stars */
+.score-board {
+  text-align: center;
+  padding: 40px 24px;
+  display: none;
+  animation: fadeIn 0.5s ease;
+}
+
+.score-board.visible { display: block; }
+
+.score-medallion {
+  width: 140px;
+  height: 140px;
+  margin: 0 auto 24px;
+  background: linear-gradient(135deg, var(--rug-crimson), var(--rug-navy));
+  border: 4px solid var(--rug-gold);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 30px rgba(201,150,58,0.35), 0 0 60px rgba(139,26,26,0.2);
+}
+
+.score-num {
+  font-family: 'Cinzel', serif;
+  font-size: 40px;
+  color: var(--rug-gold-light);
+  line-height: 1;
+  font-weight: 700;
+}
+
+.score-denom {
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  color: rgba(201,150,58,0.8);
+}
+
+.score-stars {
+  font-size: 28px;
+  letter-spacing: 4px;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.score-msg {
+  font-family: 'Cinzel', serif;
+  font-size: 20px;
+  color: var(--rug-red);
+  margin-bottom: 8px;
+}
+
+.score-sub {
+  font-size: 14px;
+  color: var(--rug-text-soft);
+  margin-bottom: 24px;
+}
+
+.score-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-retry {
+  padding: 12px 28px;
+  background: linear-gradient(135deg, var(--rug-crimson), #9b1b1b);
+  border: 1px solid var(--rug-gold);
+  border-radius: 4px;
+  color: var(--rug-ivory);
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: all 0.2s;
+}
+
+.btn-retry:hover { background: linear-gradient(135deg, #A82020, var(--rug-crimson)); }
+
+.btn-go-intro {
+  padding: 12px 28px;
+  background: linear-gradient(135deg, #1A2A5E, #2A3A7E);
+  border: 1px solid var(--rug-gold);
+  border-radius: 4px;
+  color: var(--rug-gold-light);
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: all 0.2s;
+}
+
+.btn-go-intro:hover { background: linear-gradient(135deg, #2A3A7E, #1A2A5E); }
+
+/* ── Section headings ── */
+.section-heading {
+  padding: 20px 24px 8px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.section-heading h2 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(16px, 3vw, 22px);
+  color: var(--rug-red);
+  white-space: nowrap;
+}
+
+.heading-ornament {
+  flex: 1;
+  height: 2px;
+  background: repeating-linear-gradient(90deg,
+    var(--rug-crimson) 0px, var(--rug-crimson) 6px,
+    transparent 6px, transparent 10px,
+    var(--rug-gold) 10px, var(--rug-gold) 16px,
+    transparent 16px, transparent 20px);
+}
+
+/* Ornate colour strip */
+.rug-strip {
+  height: 10px;
+  background: repeating-linear-gradient(90deg,
+    var(--rug-crimson)   0px, var(--rug-crimson)   12px,
+    var(--rug-gold)      12px, var(--rug-gold)      18px,
+    var(--rug-navy)      18px, var(--rug-navy)      30px,
+    var(--rug-gold)      30px, var(--rug-gold)      36px,
+    var(--rug-ivory)     36px, var(--rug-ivory)     40px,
+    var(--rug-gold)      40px, var(--rug-gold)      46px,
+    var(--rug-navy)      46px, var(--rug-navy)      58px,
+    var(--rug-gold)      58px, var(--rug-gold)      64px,
+    var(--rug-crimson)   64px, var(--rug-crimson)   76px);
+  margin-bottom: 0;
+}
+
+/* Exercise type tag */
+.exercise-type-tag {
+  display: inline-block;
+  background: rgba(26,42,94,0.1);
+  border: 1px solid rgba(26,42,94,0.3);
+  border-radius: 20px;
+  padding: 2px 10px;
+  font-size: 10px;
+  color: var(--rug-navy);
+  font-family: 'Cinzel', serif;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  :root { --sidebar-w: 56px; }
+  .nav-btn span:not(.nav-icon) { display: none; }
+  .nav-label { display: none; }
+  .sidebar-logo h2, .sidebar-logo p { display: none; }
+  .sidebar-logo .medallion-top { font-size: 22px; }
+  .students-panel { display: none; }
+  .page-header { padding: 16px; }
+  .page-header h1 { font-size: 18px; }
+  .content-area, .students-grid, .quiz-wrap { padding: 0 12px; }
+  .students-grid { grid-template-columns: 1fr; }
+  .exercises-progress { margin: 12px 12px 0; }
+  .quiz-options { grid-template-columns: 1fr; }
+  .score-actions { flex-direction: column; align-items: center; }
+}
+
+@media (min-width: 1200px) {
+  :root { --sidebar-w: 260px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ SIDEBAR ══════════ -->
+<nav id="sidebar">
+  <div class="sidebar-logo">
+    <div class="medallion-top">✦❋✦</div>
+    <h2>Cambridge Primary<br>Mathematics</h2>
+    <p>Grade 3 · Unit 17</p>
+  </div>
+
+  <div class="sidebar-nav">
+    <div class="nav-label">Sections</div>
+
+    <button class="nav-btn active" onclick="showSection('intro')" id="btn-intro">
+      <span class="nav-icon">📖</span>
+      <span>Introduction</span>
+    </button>
+
+    <button class="nav-btn" onclick="showSection('exercises')" id="btn-exercises">
+      <span class="nav-icon">✏️</span>
+      <span>Exercises</span>
+    </button>
+
+    <button class="nav-btn" onclick="showSection('quiz')" id="btn-quiz">
+      <span class="nav-icon">🎯</span>
+      <span>Quiz</span>
+    </button>
+  </div>
+
+  <div class="students-panel">
+    <div class="nav-label">Students</div>
+    <div>
+      <span class="student-chip">Hazhir</span>
+      <span class="student-chip">Yosf</span>
+      <span class="student-chip">Mam</span>
+      <span class="student-chip">Aydn</span>
+      <span class="student-chip">Aras</span>
+      <span class="student-chip">Taman</span>
+      <span class="student-chip">Zeynep</span>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════ MAIN CONTENT ══════════ -->
+<main id="main">
+
+  <!-- ══ SECTION 1: INTRODUCTION ══ -->
+  <div id="sec-intro" class="section active">
+
+    <div class="page-header">
+      <div class="header-ornament">
+        <div class="ornament-line"></div>
+        <div class="ornament-diamond">◆ ◈ ◆</div>
+        <div class="ornament-line"></div>
+      </div>
+      <h1>17.1 Shape and Symmetry</h1>
+      <div class="subtitle">Cambridge Primary Mathematics · Grade 3</div>
+    </div>
+    <div class="rug-strip"></div>
+
+    <div class="learning-banner">
+      <ul>
+        <li>Find horizontal and vertical lines of symmetry on 2D shapes</li>
+        <li>Sketch the reflection of a 2D shape</li>
+      </ul>
+    </div>
+
+    <div class="content-area">
+
+      <!-- Key Concept -->
+      <div class="rug-card">
+        <div class="card-title">What is Symmetry?</div>
+        <div class="card-body">
+          <p>A <strong style="color:var(--rug-red)">symmetrical shape</strong> can be split in two along a <strong style="color:var(--rug-red)">line of symmetry</strong>.</p>
+          <p style="margin-top:10px">The line gives two <em>equal halves</em> that are <strong style="color:var(--rug-navy)">mirror images</strong> of each other.</p>
+          <p style="margin-top:10px">The line of symmetry is also called the <strong style="color:var(--rug-crimson)">mirror line</strong>.</p>
+        </div>
+      </div>
+
+      <!-- Horizontal vs Vertical — POLISHED with SVG illustrations -->
+      <div class="rug-card">
+        <div class="card-title">Horizontal &amp; Vertical</div>
+
+        <!-- POLISH: replaced invisible text with proper SVG direction demos -->
+        <div class="dir-svg-demo">
+          <div class="dir-svg-item">
+            <svg width="80" height="100" viewBox="0 0 80 100">
+              <rect width="80" height="100" rx="6" fill="rgba(26,42,94,0.08)" stroke="rgba(26,42,94,0.3)" stroke-width="1"/>
+              <!-- Vertical line -->
+              <line x1="40" y1="10" x2="40" y2="90" stroke="#1A2A5E" stroke-width="3" stroke-linecap="round"/>
+              <!-- Arrowheads -->
+              <polygon points="40,5 35,18 45,18" fill="#1A2A5E"/>
+              <polygon points="40,95 35,82 45,82" fill="#1A2A5E"/>
+            </svg>
+            <div class="dir-svg-label">VERTICAL</div>
+            <div style="font-size:11px;color:var(--rug-text-soft);margin-top:3px;text-align:center">↕ Up &amp; Down</div>
+          </div>
+
+          <div style="display:flex;align-items:center;padding-top:20px">
+            <svg width="40" height="40" viewBox="0 0 40 40">
+              <circle cx="20" cy="20" r="16" fill="rgba(201,150,58,0.15)" stroke="var(--rug-gold)" stroke-width="2"/>
+              <text x="20" y="26" text-anchor="middle" font-family="Cinzel,serif" font-size="18" fill="var(--rug-gold)" font-weight="700">vs</text>
+            </svg>
+          </div>
+
+          <div class="dir-svg-item">
+            <svg width="100" height="80" viewBox="0 0 100 80">
+              <rect width="100" height="80" rx="6" fill="rgba(139,26,26,0.06)" stroke="rgba(139,26,26,0.25)" stroke-width="1"/>
+              <!-- Horizontal line -->
+              <line x1="10" y1="40" x2="90" y2="40" stroke="#8B1A1A" stroke-width="3" stroke-linecap="round"/>
+              <!-- Arrowheads -->
+              <polygon points="5,40 18,35 18,45" fill="#8B1A1A"/>
+              <polygon points="95,40 82,35 82,45" fill="#8B1A1A"/>
+            </svg>
+            <div class="dir-svg-label" style="color:var(--rug-red)">HORIZONTAL</div>
+            <div style="font-size:11px;color:var(--rug-text-soft);margin-top:3px;text-align:center">↔ Left &amp; Right</div>
+          </div>
+        </div>
+
+        <!-- BUG FIX #7: was rgba(245,237,214,0.6) — ivory on cream = invisible -->
+        <div class="card-body" style="text-align:center;font-size:14px;color:var(--rug-text-soft);margin-top:8px">
+          Some shapes have a <strong style="color:var(--rug-navy)">vertical</strong> line <em>and</em> a <strong style="color:var(--rug-red)">horizontal</strong> line of symmetry.
+        </div>
+      </div>
+
+      <!-- Interactive Shape Demo -->
+      <div class="rug-card">
+        <div class="card-title">Tap a Shape to See Its Line of Symmetry</div>
+        <div class="symmetry-demo">
+
+          <!-- Smiley face -->
+          <div class="sym-shape-box" onclick="toggleSym(this,'smiley-line')" id="box-smiley">
+            <svg viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="42" fill="#f5a623" stroke="#c97b2a" stroke-width="2"/>
+              <circle cx="36" cy="42" r="5" fill="#5a3000"/>
+              <circle cx="64" cy="42" r="5" fill="#5a3000"/>
+              <path d="M32 62 Q50 78 68 62" stroke="#5a3000" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <line id="smiley-line" x1="50" y1="5" x2="50" y2="95"
+                stroke="#e63535" stroke-width="2.5" stroke-dasharray="6,4" opacity="0"/>
+            </svg>
+            <div class="sym-label">Smiley Face</div>
+            <div class="sym-hint">Tap to reveal ✦</div>
+          </div>
+
+          <!-- Crescent moon -->
+          <div class="sym-shape-box" onclick="toggleSym(this,'moon-line')" id="box-moon">
+            <svg viewBox="0 0 100 120">
+              <path d="M70 10 Q20 25 20 60 Q20 95 70 110 Q35 95 30 60 Q25 25 70 10Z"
+                fill="#4da6e0" stroke="#2563a8" stroke-width="2"/>
+              <line id="moon-line" x1="10" y1="60" x2="90" y2="60"
+                stroke="#e63535" stroke-width="2.5" stroke-dasharray="6,4" opacity="0"/>
+            </svg>
+            <div class="sym-label">Crescent Moon</div>
+            <div class="sym-hint">Tap to reveal ✦</div>
+          </div>
+
+          <!-- Rectangle — 2 lines -->
+          <div class="sym-shape-box" onclick="toggleSym(this,'rect-v','rect-h')" id="box-rect">
+            <svg viewBox="0 0 100 100">
+              <rect x="15" y="25" width="70" height="50" rx="4"
+                fill="rgba(26,42,94,0.6)" stroke="#c9963a" stroke-width="2"/>
+              <line id="rect-v" x1="50" y1="22" x2="50" y2="78"
+                stroke="#e63535" stroke-width="2.5" stroke-dasharray="6,4" opacity="0"/>
+              <line id="rect-h" x1="12" y1="50" x2="88" y2="50"
+                stroke="#2D6A4F" stroke-width="2.5" stroke-dasharray="6,4" opacity="0"/>
+            </svg>
+            <div class="sym-label">Rectangle</div>
+            <div class="sym-hint">Tap — has 2 lines! ✦</div>
+          </div>
+
+          <!-- Triangle (isosceles) -->
+          <div class="sym-shape-box" onclick="toggleSym(this,'tri-line')" id="box-tri">
+            <svg viewBox="0 0 100 100">
+              <polygon points="50,10 15,90 85,90"
+                fill="rgba(139,26,26,0.4)" stroke="#c9963a" stroke-width="2"/>
+              <line id="tri-line" x1="50" y1="8" x2="50" y2="92"
+                stroke="#e63535" stroke-width="2.5" stroke-dasharray="6,4" opacity="0"/>
+            </svg>
+            <div class="sym-label">Isosceles Triangle</div>
+            <div class="sym-hint">Tap to reveal ✦</div>
+          </div>
+
+        </div>
+        <!-- BUG FIX #8: was rgba(245,237,214,0.4) — invisible on cream -->
+        <p style="text-align:center;font-size:12px;color:var(--rug-text-soft);margin-top:4px;opacity:0.75">
+          🔴 Red dashed line = line of symmetry &nbsp;|&nbsp; 🟢 Green = 2nd line
+        </p>
+      </div>
+
+      <!-- Reflection concept -->
+      <div class="rug-card">
+        <div class="card-title">Reflection</div>
+        <div class="card-body">
+          <p>When you <strong style="color:var(--rug-red)">reflect</strong> a shape, you flip it across the mirror line.</p>
+          <p style="margin-top:10px">Each point on the shape moves to the <em>same distance</em> on the other side of the mirror line.</p>
+        </div>
+
+        <!-- Reflection demo SVG — labelled more clearly -->
+        <div style="position:relative;margin:16px auto 0;max-width:380px">
+          <div style="text-align:center;font-family:'Cinzel',serif;font-size:10px;color:var(--rug-text-soft);letter-spacing:1.5px;margin-bottom:6px">EXAMPLE — REFLECTION</div>
+          <svg viewBox="0 0 300 140" style="width:100%;display:block;border-radius:6px;border:1px solid rgba(201,150,58,0.3)">
+            <rect width="300" height="140" fill="rgba(13,13,26,0.55)" rx="8"/>
+            <line x1="150" y1="10" x2="150" y2="130" stroke="#e63535" stroke-width="2" stroke-dasharray="8,4"/>
+            <text x="150" y="9" text-anchor="middle" fill="#e63535" font-size="8" font-family="Cinzel,serif">MIRROR LINE</text>
+            <polygon points="60,30 110,30 110,110 60,110 90,70"
+              fill="rgba(37,99,168,0.6)" stroke="#4da6e0" stroke-width="2"/>
+            <polygon points="240,30 190,30 190,110 240,110 210,70"
+              fill="rgba(139,26,26,0.4)" stroke="#e06060" stroke-width="2" stroke-dasharray="5,3"/>
+            <text x="85" y="135" text-anchor="middle" fill="#4da6e0" font-size="11" font-family="Crimson Text,serif">Original</text>
+            <text x="215" y="135" text-anchor="middle" fill="#e06060" font-size="11" font-family="Crimson Text,serif">Reflection</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Vocabulary -->
+      <div class="rug-card" style="margin-bottom:0">
+        <div class="card-title">Key Vocabulary</div>
+        <!-- BUG FIX #9: was rgba(245,237,214,0.5) — invisible on cream -->
+        <p style="font-size:13px;color:var(--rug-text-soft);text-align:center;margin-bottom:12px;opacity:0.8">Tap each word to reveal its meaning</p>
+        <div class="vocab-grid">
+          <div class="vocab-item" onclick="this.classList.toggle('revealed')">
+            <div style="font-size:22px;margin-bottom:4px">🔀</div>
+            <div class="vocab-word">Symmetry</div>
+            <div class="vocab-def">When a shape can be divided into two identical mirror halves.</div>
+            <div class="vocab-tap-hint">Tap ✦</div>
+          </div>
+          <div class="vocab-item" onclick="this.classList.toggle('revealed')">
+            <div style="font-size:22px;margin-bottom:4px">📏</div>
+            <div class="vocab-word">Line of Symmetry</div>
+            <div class="vocab-def">The line that divides a shape into two equal mirror halves. Also called the mirror line.</div>
+            <div class="vocab-tap-hint">Tap ✦</div>
+          </div>
+          <div class="vocab-item" onclick="this.classList.toggle('revealed')">
+            <div style="font-size:22px;margin-bottom:4px">↔</div>
+            <div class="vocab-word">Horizontal</div>
+            <div class="vocab-def">Going across — from left to right, like the horizon.</div>
+            <div class="vocab-tap-hint">Tap ✦</div>
+          </div>
+          <div class="vocab-item" onclick="this.classList.toggle('revealed')">
+            <div style="font-size:22px;margin-bottom:4px">↕</div>
+            <div class="vocab-word">Vertical</div>
+            <div class="vocab-def">Going up and down — straight up like a wall.</div>
+            <div class="vocab-tap-hint">Tap ✦</div>
+          </div>
+          <div class="vocab-item" onclick="this.classList.toggle('revealed')">
+            <div style="font-size:22px;margin-bottom:4px">🪞</div>
+            <div class="vocab-word">Reflection</div>
+            <div class="vocab-def">Flipping a shape across a mirror line so it faces the opposite direction.</div>
+            <div class="vocab-tap-hint">Tap ✦</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content-area -->
+  </div><!-- /sec-intro -->
+
+
+  <!-- ══ SECTION 2: EXERCISES ══ -->
+  <div id="sec-exercises" class="section">
+
+    <div class="page-header">
+      <div class="header-ornament">
+        <div class="ornament-line"></div>
+        <div class="ornament-diamond">◆ ✏️ ◆</div>
+        <div class="ornament-line"></div>
+      </div>
+      <h1>Exercise 17.1</h1>
+      <div class="subtitle">Shape and Symmetry · Seven Students</div>
+    </div>
+    <div class="rug-strip"></div>
+
+    <!-- POLISH: Completion progress tracker -->
+    <div class="exercises-progress">
+      <div class="progress-label">Progress</div>
+      <div class="progress-track">
+        <div class="progress-fill" id="ex-progress-fill"></div>
+      </div>
+      <div class="progress-count" id="ex-progress-count">0 / 7</div>
+    </div>
+
+    <div class="section-heading">
+      <h2>Student Exercises</h2>
+      <div class="heading-ornament"></div>
+    </div>
+
+    <div class="students-grid">
+
+      <!-- HAZHIR -->
+      <div class="student-card" id="card-hazhir">
+        <div class="student-header">
+          <div class="student-name">Hazhir</div>
+          <div class="student-avatar">🌟</div>
+        </div>
+        <div class="exercise-area">
+          <div class="exercise-type-tag">Draw the Line</div>
+          <div class="exercise-question">Draw a <strong>vertical</strong> line of symmetry on the smiley face below.</div>
+          <div class="canvas-label">✦ Draw the line of symmetry ✦</div>
+          <div class="draw-canvas-wrap">
+            <canvas id="canvas-hazhir" width="220" height="160"
+              ontouchstart="startDraw(event,'hazhir')" ontouchmove="doDraw(event,'hazhir')" ontouchend="endDraw(event,'hazhir')"
+              onmousedown="startDraw(event,'hazhir')" onmousemove="doDraw(event,'hazhir')" onmouseup="endDraw(event,'hazhir')">
+            </canvas>
+          </div>
+          <div class="canvas-actions">
+            <button class="btn-clear-canvas" onclick="clearCanvas('hazhir')">✕ Clear</button>
+            <button class="btn-check" style="margin-top:0;flex:2" onclick="checkDraw('hazhir','vertical')">Check ◆</button>
+          </div>
+          <div class="feedback-msg" id="fb-hazhir"></div>
+        </div>
+      </div>
+
+      <!-- YOSF -->
+      <div class="student-card" id="card-yosf">
+        <div class="student-header">
+          <div class="student-name">Yosf</div>
+          <div class="student-avatar">🌙</div>
+        </div>
+        <div class="exercise-area">
+          <div class="exercise-type-tag">Choose the Answer</div>
+          <div class="exercise-question">A crescent moon has a line of symmetry that goes:</div>
+          <div class="mcq-options">
+            <button class="mcq-btn" onclick="checkMCQ(this,'yosf',false)"><span class="mcq-mark">◇</span> Vertically (up and down)</button>
+            <button class="mcq-btn" onclick="checkMCQ(this,'yosf',true)"><span class="mcq-mark">◇</span> Horizontally (left and right)</button>
+            <button class="mcq-btn" onclick="checkMCQ(this,'yosf',false)"><span class="mcq-mark">◇</span> It has no symmetry</button>
+          </div>
+          <div class="feedback-msg" id="fb-yosf"></div>
+        </div>
+      </div>
+
+      <!-- MAM -->
+      <div class="student-card" id="card-mam">
+        <div class="student-header">
+          <div class="student-name">Mam</div>
+          <div class="student-avatar">🔷</div>
+        </div>
+        <div class="exercise-area">
+          <div class="exercise-type-tag">Choose the Shape</div>
+          <div class="exercise-question">Which shapes have <strong>exactly 2</strong> lines of symmetry? Tap all that apply.</div>
+          <div class="shape-selector" id="shape-sel-mam">
+            <div class="shape-opt" onclick="toggleShape(this)" data-correct="true">
+              <svg viewBox="0 0 60 60"><rect x="8" y="18" width="44" height="24" rx="3" fill="rgba(37,99,168,0.5)" stroke="#4da6e0" stroke-width="2"/></svg>
+              <div class="shape-opt-label">Rectangle</div>
+            </div>
+            <div class="shape-opt" onclick="toggleShape(this)" data-correct="false">
+              <svg viewBox="0 0 60 60"><polygon points="30,8 52,52 8,52" fill="rgba(139,26,26,0.4)" stroke="#e06060" stroke-width="2"/></svg>
+              <div class="shape-opt-label">Triangle</div>
+            </div>
+            <div class="shape-opt" onclick="toggleShape(this)" data-correct="true">
+              <svg viewBox="0 0 60 60"><ellipse cx="30" cy="30" rx="26" ry="20" fill="rgba(45,106,79,0.4)" stroke="#4ade80" stroke-width="2"/></svg>
+              <div class="shape-opt-label">Oval</div>
+            </div>
+            <div class="shape-opt" onclick="toggleShape(this)" data-correct="false">
+              <svg viewBox="0 0 60 60"><path d="M50 10 Q12 20 12 50 Q12 50 50 50 Q25 40 25 30 Q25 20 50 10Z" fill="rgba(201,150,58,0.3)" stroke="#c9963a" stroke-width="2"/></svg>
+              <div class="shape-opt-label">Crescent</div>
+            </div>
+          </div>
+          <button class="btn-check" onclick="checkShapeSelect('mam')">Check ◆</button>
+          <div class="feedback-msg" id="fb-mam"></div>
+        </div>
+      </div>
+
+      <!-- AYDN -->
+      <div class="student-card" id="card-aydn">
+        <div class="student-header">
+          <div class="student-name">Aydn</div>
+          <div class="student-avatar">⭐</div>
+        </div>
+        <div class="exercise-area">
+          <div class="exercise-type-tag">Choose the Answer</div>
+          <div class="exercise-question">What do we call the line that divides a shape into two mirror halves?</div>
+          <div class="mcq-options">
+            <button class="mcq-btn" onclick="checkMCQ(this,'aydn',false)"><span class="mcq-mark">◇</span> The centre line</button>
+            <button class="mcq-btn" onclick="checkMCQ(this,'aydn',true)"><span class="mcq-mark">◇</span> The line of symmetry</button>
+            <button class="mcq-btn" onclick="checkMCQ(this,'aydn',false)"><span class="mcq-mark">◇</span> The reflection line</button>
+            <button class="mcq-btn" onclick="checkMCQ(this,'aydn',false)"><span class="mcq-mark">◇</span> The border</button>
+          </div>
+          <div class="feedback-msg" id="fb-aydn"></div>
+        </div>
+      </div>
+
+      <!-- ARAS -->
+      <div class="student-card" id="card-aras">
+        <div class="student-header">
+          <div class="student-name">Aras</div>
+          <div class="student-avatar">💎</div>
+        </div>
+        <div class="exercise-area">
+          <div class="exercise-type-tag">Draw the Line</div>
+          <div class="exercise-question">Draw a <strong>horizontal</strong> line of symmetry on the rectangle below.</div>
+          <div class="canvas-label">✦ Draw the line of symmetry ✦</div>
+          <div class="draw-canvas-wrap">
+            <canvas id="canvas-aras" width="220" height="160"
+              ontouchstart="startDraw(event,'aras')" ontouchmove="doDraw(event,'aras')" ontouchend="endDraw(event,'aras')"
+              onmousedown="startDraw(event,'aras')" onmousemove="doDraw(event,'aras')" onmouseup="endDraw(event,'aras')">
+            </canvas>
+          </div>
+          <div class="canvas-actions">
+            <button class="btn-clear-canvas" onclick="clearCanvas('aras')">✕ Clear</button>
+            <button class="btn-check" style="margin-top:0;flex:2" onclick="checkDraw('aras','horizontal')">Check ◆</button>
+          </div>
+          <div class="feedback-msg" id="fb-aras"></div>
+        </div>
+      </div>
+
+      <!-- TAMAN -->
+      <div class="student-card" id="card-taman">
+        <div class="student-header">
+          <div class="student-name">Taman</div>
+          <div class="student-avatar">🌺</div>
+        </div>
+        <div class="exercise-area">
+          <div class="exercise-type-tag">True or False</div>
+          <div class="exercise-question">Is this statement <strong>true</strong> or <strong>false</strong>?<br><em style="color:var(--rug-navy)">"A vertical line goes from left to right."</em></div>
+          <div class="mcq-options">
+            <button class="mcq-btn" onclick="checkMCQ(this,'taman',false)"><span class="mcq-mark">◇</span> True</button>
+            <button class="mcq-btn" onclick="checkMCQ(this,'taman',true)"><span class="mcq-mark">◇</span> False — vertical goes up and down</button>
+          </div>
+          <div class="feedback-msg" id="fb-taman"></div>
+        </div>
+      </div>
+
+      <!-- ZEYNEP -->
+      <div class="student-card" id="card-zeynep">
+        <div class="student-header">
+          <div class="student-name">Zeynep</div>
+          <div class="student-avatar">🦋</div>
+        </div>
+        <div class="exercise-area">
+          <div class="exercise-type-tag">Choose the Answer</div>
+          <div class="exercise-question">When you <strong>reflect</strong> a shape, you:</div>
+          <div class="mcq-options">
+            <button class="mcq-btn" onclick="checkMCQ(this,'zeynep',false)"><span class="mcq-mark">◇</span> Rotate it in a circle</button>
+            <button class="mcq-btn" onclick="checkMCQ(this,'zeynep',false)"><span class="mcq-mark">◇</span> Make it bigger</button>
+            <button class="mcq-btn" onclick="checkMCQ(this,'zeynep',true)"><span class="mcq-mark">◇</span> Flip it across a mirror line</button>
+            <button class="mcq-btn" onclick="checkMCQ(this,'zeynep',false)"><span class="mcq-mark">◇</span> Move it sideways</button>
+          </div>
+          <div class="feedback-msg" id="fb-zeynep"></div>
+        </div>
+      </div>
+
+    </div><!-- /students-grid -->
+  </div><!-- /sec-exercises -->
+
+
+  <!-- ══ SECTION 3: QUIZ ══ -->
+  <div id="sec-quiz" class="section">
+
+    <div class="page-header">
+      <div class="header-ornament">
+        <div class="ornament-line"></div>
+        <div class="ornament-diamond">◆ 🎯 ◆</div>
+        <div class="ornament-line"></div>
+      </div>
+      <h1>Symmetry Quiz</h1>
+      <div class="subtitle">10 Questions · Shape and Symmetry</div>
+    </div>
+    <div class="rug-strip"></div>
+
+    <!-- POLISH: Welcome screen shown before quiz starts -->
+    <div id="quiz-welcome-screen" class="quiz-welcome">
+      <span class="quiz-welcome-icon">🎯</span>
+      <h2>Ready to Test Your Knowledge?</h2>
+      <p>Answer 10 questions about shapes and symmetry.<br>Take your time — think carefully!</p>
+      <div class="quiz-info-chips">
+        <span class="quiz-chip">📋 10 Questions</span>
+        <span class="quiz-chip">🕐 No time limit</span>
+        <span class="quiz-chip">✦ Instant feedback</span>
+      </div>
+      <button class="btn-start-quiz" onclick="startQuiz()">◆ Start Quiz ◆</button>
+    </div>
+
+    <div class="quiz-wrap" id="quiz-main-area" style="display:none">
+      <div id="quiz-area">
+        <div style="height:20px"></div>
+        <div class="quiz-counter" id="quiz-counter">Question 1 of 10</div>
+        <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quiz-bar" style="width:10%"></div></div>
+        <div class="quiz-card" id="quiz-card">
+          <div class="quiz-q-num" id="quiz-qnum">QUESTION 1</div>
+          <div class="quiz-question" id="quiz-q-text"></div>
+          <div class="quiz-svg-wrap" id="quiz-svg-wrap"></div>
+          <div class="quiz-options" id="quiz-opts"></div>
+          <div class="quiz-feedback" id="quiz-fb"></div>
+          <button class="btn-next-q" id="btn-next-q" onclick="nextQuizQ()">Next ◆</button>
+        </div>
+      </div>
+
+      <div class="score-board" id="score-board">
+        <!-- POLISH: Star rating above medallion -->
+        <span class="score-stars" id="score-stars">⭐⭐⭐</span>
+        <div class="score-medallion">
+          <div class="score-num" id="score-num">0</div>
+          <div class="score-denom" id="score-denom">/ 10</div>
+        </div>
+        <div class="score-msg" id="score-msg">Well done!</div>
+        <div class="score-sub" id="score-sub">Keep practising symmetry!</div>
+        <div class="score-actions">
+          <button class="btn-retry" onclick="restartQuiz()">◆ Try Again ◆</button>
+          <button class="btn-go-intro" onclick="showSection('intro')">📖 Review Notes</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /sec-quiz -->
+
+</main>
+
+<script>
+/* ══════════════════════════════
+   NAVIGATION
+══════════════════════════════ */
+function showSection(name) {
+  ['intro','exercises','quiz'].forEach(function(s) {
+    document.getElementById('sec-'+s).classList.remove('active');
+    document.getElementById('btn-'+s).classList.remove('active');
+  });
+  document.getElementById('sec-'+name).classList.add('active');
+  document.getElementById('btn-'+name).classList.add('active');
+  document.getElementById('main').scrollTo({ top: 0, behavior: 'smooth' });
+
+  if (name === 'exercises') {
+    updateProgress();
+  }
+}
+
+/* ══════════════════════════════
+   EXERCISES — PROGRESS TRACKER
+══════════════════════════════ */
+var STUDENT_NAMES = ['hazhir','yosf','mam','aydn','aras','taman','zeynep'];
+
+function updateProgress() {
+  var completed = STUDENT_NAMES.filter(function(n) {
+    var card = document.getElementById('card-' + n);
+    return card && card.classList.contains('completed');
+  }).length;
+  var total = STUDENT_NAMES.length;
+  document.getElementById('ex-progress-fill').style.width = (completed / total * 100) + '%';
+  document.getElementById('ex-progress-count').textContent = completed + ' / ' + total;
+}
+
+/* ══════════════════════════════
+   SYMMETRY SHAPE TOGGLE
+══════════════════════════════ */
+function toggleSym(box) {
+  var args = Array.from(arguments).slice(1);
+  var showing = box.classList.toggle('show-line');
+  args.forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.setAttribute('opacity', showing ? '1' : '0');
+  });
+  var hint = box.querySelector('.sym-hint');
+  if (hint) hint.textContent = showing ? 'Tap to hide ✦' : 'Tap to reveal ✦';
+}
+
+/* ══════════════════════════════
+   CANVAS DRAWING
+══════════════════════════════ */
+var drawStates = {};
+
+function getPos(e, canvas) {
+  var r = canvas.getBoundingClientRect();
+  var scaleX = canvas.width / r.width;
+  var scaleY = canvas.height / r.height;
+  if (e.touches && e.touches.length > 0) {
+    return {
+      x: (e.touches[0].clientX - r.left) * scaleX,
+      y: (e.touches[0].clientY - r.top) * scaleY
+    };
+  }
+  return {
+    x: (e.clientX - r.left) * scaleX,
+    y: (e.clientY - r.top) * scaleY
+  };
+}
+
+function initCanvas(name) {
+  var c = document.getElementById('canvas-' + name);
+  if (!c) return;
+  if (!drawStates[name]) drawStates[name] = { drawing: false, points: [] };
+  var ctx = c.getContext('2d');
+  ctx.clearRect(0, 0, c.width, c.height);
+
+  if (name === 'hazhir') {
+    /* Smiley face */
+    ctx.beginPath(); ctx.arc(110, 80, 60, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(245,166,35,0.7)'; ctx.fill();
+    ctx.strokeStyle = '#c97b2a'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.beginPath(); ctx.arc(85, 65, 8, 0, Math.PI*2);
+    ctx.fillStyle = '#3a2000'; ctx.fill();
+    ctx.beginPath(); ctx.arc(135, 65, 8, 0, Math.PI*2);
+    ctx.fillStyle = '#3a2000'; ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(82, 100); ctx.quadraticCurveTo(110, 122, 138, 100);
+    ctx.strokeStyle = '#3a2000'; ctx.lineWidth = 3; ctx.stroke();
+  } else if (name === 'aras') {
+    /* Rectangle */
+    ctx.beginPath();
+    if (ctx.roundRect) {
+      ctx.roundRect(30, 45, 160, 70, 6);
+    } else {
+      ctx.rect(30, 45, 160, 70);
+    }
+    ctx.fillStyle = 'rgba(26,42,94,0.6)'; ctx.fill();
+    ctx.strokeStyle = '#c9963a'; ctx.lineWidth = 2; ctx.stroke();
+  }
+}
+
+function startDraw(e, name) {
+  e.preventDefault();
+  if (!drawStates[name]) drawStates[name] = { drawing: false, points: [] };
+  var c = document.getElementById('canvas-' + name);
+  drawStates[name].drawing = true;
+  drawStates[name].points = [getPos(e, c)];
+}
+
+function doDraw(e, name) {
+  e.preventDefault();
+  if (!drawStates[name] || !drawStates[name].drawing) return;
+  var c = document.getElementById('canvas-' + name);
+  var ctx = c.getContext('2d');
+  var pos = getPos(e, c);
+  drawStates[name].points.push(pos);
+
+  initCanvas(name);
+  var pts = drawStates[name].points;
+  ctx.beginPath();
+  ctx.moveTo(pts[0].x, pts[0].y);
+  for (var i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
+  ctx.strokeStyle = '#e63535';
+  ctx.lineWidth = 3;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.setLineDash([8, 4]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+function endDraw(e, name) {
+  if (drawStates[name]) drawStates[name].drawing = false;
+}
+
+function clearCanvas(name) {
+  if (drawStates[name]) drawStates[name].points = [];
+  initCanvas(name);
+  var fb = document.getElementById('fb-' + name);
+  if (fb) { fb.className = 'feedback-msg'; fb.textContent = ''; }
+  var card = document.getElementById('card-' + name);
+  if (card) card.classList.remove('completed');
+  updateProgress();
+}
+
+function checkDraw(name, expectedDir) {
+  var pts = drawStates[name] && drawStates[name].points;
+  if (!pts || pts.length < 3) {
+    showFeedback(name, false, 'Please draw a line first!');
+    return;
+  }
+  var xs = pts.map(function(p){ return p.x; });
+  var ys = pts.map(function(p){ return p.y; });
+  var dx = Math.max.apply(null, xs) - Math.min.apply(null, xs);
+  var dy = Math.max.apply(null, ys) - Math.min.apply(null, ys);
+  var isVertical   = dy > dx * 1.5;
+  var isHorizontal = dx > dy * 1.5;
+
+  if (expectedDir === 'vertical' && isVertical) {
+    showFeedback(name, true, '✦ Excellent! That is a vertical line of symmetry!');
+    markComplete(name);
+  } else if (expectedDir === 'horizontal' && isHorizontal) {
+    showFeedback(name, true, '✦ Perfect! That is a horizontal line of symmetry!');
+    markComplete(name);
+  } else {
+    var hint = expectedDir === 'vertical'
+      ? 'Try drawing a straight line from top to bottom.'
+      : 'Try drawing a straight line from left to right.';
+    showFeedback(name, false, 'Not quite! ' + hint);
+  }
+}
+
+/* ══════════════════════════════
+   MCQ
+══════════════════════════════ */
+function checkMCQ(btn, name, isCorrect) {
+  var area = btn.closest('.exercise-area');
+  var btns = area.querySelectorAll('.mcq-btn');
+  btns.forEach(function(b) { b.disabled = true; b.querySelector('.mcq-mark').textContent = '◇'; });
+  if (isCorrect) {
+    btn.classList.add('correct');
+    btn.querySelector('.mcq-mark').textContent = '✓';
+    showFeedback(name, true, '✦ Correct! Well done!');
+    markComplete(name);
+  } else {
+    btn.classList.add('wrong');
+    btn.querySelector('.mcq-mark').textContent = '✗';
+    showFeedback(name, false, 'Not quite — remember the key vocabulary!');
+  }
+}
+
+/* ══════════════════════════════
+   SHAPE SELECTOR
+══════════════════════════════ */
+function toggleShape(el) {
+  el.classList.toggle('selected');
+}
+
+function checkShapeSelect(name) {
+  var container = document.getElementById('shape-sel-' + name);
+  var opts = container.querySelectorAll('.shape-opt');
+  var allCorrect = true;
+  opts.forEach(function(o) {
+    var shouldBeSel = o.dataset.correct === 'true';
+    var isSel = o.classList.contains('selected');
+    o.classList.remove('selected');
+    if (shouldBeSel && isSel) {
+      o.classList.add('correct-sel');
+    } else if (!shouldBeSel && isSel) {
+      o.classList.add('wrong-sel');
+      allCorrect = false;
+    } else if (shouldBeSel && !isSel) {
+      allCorrect = false;
+    }
+  });
+  if (allCorrect) {
+    showFeedback(name, true, '✦ Correct! Rectangle and Oval each have exactly 2 lines of symmetry!');
+    markComplete(name);
+  } else {
+    showFeedback(name, false, 'Not quite! Remember: rectangles and ovals have 2 lines of symmetry.');
+  }
+}
+
+function showFeedback(name, success, msg) {
+  var fb = document.getElementById('fb-' + name);
+  if (!fb) return;
+  fb.textContent = msg;
+  fb.className = 'feedback-msg ' + (success ? 'success' : 'error');
+}
+
+function markComplete(name) {
+  var card = document.getElementById('card-' + name);
+  if (card) {
+    card.classList.add('completed');
+    /* POLISH: avatar becomes green checkmark */
+    var avatar = card.querySelector('.student-avatar');
+    if (avatar) avatar.textContent = '✅';
+    updateProgress();
+  }
+}
+
+/* ══════════════════════════════
+   QUIZ ENGINE
+══════════════════════════════ */
+var quizData = [
+  {
+    q: 'What is a line of symmetry?',
+    opts: ['A line that makes a shape bigger','A line that divides a shape into two equal mirror halves','A line around the outside of a shape','A diagonal line across the page'],
+    ans: 1, svg: null
+  },
+  {
+    q: 'Which direction does a VERTICAL line go?',
+    opts: ['Left to right','Diagonally','Up and down','In a circle'],
+    ans: 2,
+    svg: '<svg viewBox="0 0 120 80" width="120" height="80"><rect width="120" height="80" fill="rgba(13,13,26,0.4)" rx="6"/><line x1="60" y1="5" x2="60" y2="75" stroke="#e63535" stroke-width="3" stroke-dasharray="6,4"/><text x="60" y="40" text-anchor="middle" fill="rgba(245,237,214,0.5)" font-size="9" font-family="Cinzel,serif">VERTICAL</text></svg>'
+  },
+  {
+    q: 'Which direction does a HORIZONTAL line go?',
+    opts: ['Up and down','Left to right','In a circle','Diagonally'],
+    ans: 1,
+    svg: '<svg viewBox="0 0 120 80" width="120" height="80"><rect width="120" height="80" fill="rgba(13,13,26,0.4)" rx="6"/><line x1="5" y1="40" x2="115" y2="40" stroke="#2D6A4F" stroke-width="3" stroke-dasharray="6,4"/><text x="60" y="30" text-anchor="middle" fill="rgba(245,237,214,0.5)" font-size="9" font-family="Cinzel,serif">HORIZONTAL</text></svg>'
+  },
+  {
+    q: 'How many lines of symmetry does a rectangle have?',
+    opts: ['0','1','2','4'],
+    ans: 2,
+    svg: '<svg viewBox="0 0 140 100" width="140" height="100"><rect width="140" height="100" fill="rgba(13,13,26,0.4)" rx="6"/><rect x="15" y="20" width="110" height="60" rx="4" fill="rgba(37,99,168,0.4)" stroke="#4da6e0" stroke-width="2"/><line x1="70" y1="18" x2="70" y2="82" stroke="#e63535" stroke-width="2" stroke-dasharray="5,3"/><line x1="13" y1="50" x2="127" y2="50" stroke="#2D6A4F" stroke-width="2" stroke-dasharray="5,3"/></svg>'
+  },
+  {
+    q: 'What is another name for the line of symmetry?',
+    opts: ['The border','The mirror line','The middle line','The equal line'],
+    ans: 1, svg: null
+  },
+  {
+    q: 'When you REFLECT a shape, what do you do?',
+    opts: ['Rotate it','Make it larger','Flip it across a mirror line','Move it along'],
+    ans: 2, svg: null
+  },
+  {
+    q: 'An isosceles triangle has:',
+    opts: ['No lines of symmetry','Exactly 1 line of symmetry','2 lines of symmetry','3 lines of symmetry'],
+    ans: 1,
+    svg: '<svg viewBox="0 0 120 110" width="120" height="110"><rect width="120" height="110" fill="rgba(13,13,26,0.4)" rx="6"/><polygon points="60,8 15,95 105,95" fill="rgba(139,26,26,0.4)" stroke="#e06060" stroke-width="2"/><line x1="60" y1="6" x2="60" y2="97" stroke="#e63535" stroke-width="2" stroke-dasharray="5,3" opacity="0.7"/></svg>'
+  },
+  {
+    q: 'A smiley face has a line of symmetry that is:',
+    opts: ['Horizontal','Vertical','Diagonal','It has no symmetry'],
+    ans: 1,
+    svg: '<svg viewBox="0 0 100 100" width="100" height="100"><circle cx="50" cy="50" r="42" fill="rgba(245,166,35,0.5)" stroke="#c97b2a" stroke-width="2"/><circle cx="36" cy="42" r="5" fill="#5a3000"/><circle cx="64" cy="42" r="5" fill="#5a3000"/><path d="M32 62 Q50 78 68 62" stroke="#5a3000" stroke-width="3" fill="none" stroke-linecap="round"/></svg>'
+  },
+  {
+    q: 'Which of these shapes has a line of symmetry?',
+    opts: ['A random squiggle','A scalene triangle with no equal sides','A circle','A shape with no matching sides'],
+    ans: 2, svg: null
+  },
+  {
+    q: 'After reflecting a shape, the two halves are:',
+    opts: ['Different sizes','Mirror images of each other','Different colours','Rotated 90 degrees'],
+    ans: 1, svg: null
+  }
+];
+
+/* POLISH: quiz state now tracks if welcome has been dismissed */
+var quizState = { current: 0, score: 0, answered: false, started: false };
+
+function startQuiz() {
+  document.getElementById('quiz-welcome-screen').style.display = 'none';
+  document.getElementById('quiz-main-area').style.display = 'block';
+  quizState = { current: 0, score: 0, answered: false, started: true };
+  document.getElementById('quiz-area').style.display = 'block';
+  document.getElementById('score-board').classList.remove('visible');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  var i = quizState.current;
+  var total = quizData.length;
+  var q = quizData[i];
+
+  document.getElementById('quiz-counter').textContent = 'Question ' + (i+1) + ' of ' + total;
+  document.getElementById('quiz-bar').style.width = (((i+1)/total)*100) + '%';
+  document.getElementById('quiz-qnum').textContent = 'QUESTION ' + (i+1);
+  document.getElementById('quiz-q-text').textContent = q.q;
+  document.getElementById('quiz-fb').textContent = '';
+  document.getElementById('btn-next-q').classList.remove('visible');
+  quizState.answered = false;
+
+  var svgWrap = document.getElementById('quiz-svg-wrap');
+  svgWrap.innerHTML = q.svg || '';
+
+  var optsDiv = document.getElementById('quiz-opts');
+  optsDiv.innerHTML = '';
+  q.opts.forEach(function(opt, idx) {
+    var btn = document.createElement('button');
+    btn.className = 'quiz-opt-btn';
+    btn.textContent = opt;
+    btn.setAttribute('touch-action', 'manipulation');
+    btn.onclick = function() { answerQuiz(idx, q.ans); };
+    optsDiv.appendChild(btn);
+  });
+}
+
+function answerQuiz(chosen, correct) {
+  if (quizState.answered) return;
+  quizState.answered = true;
+  var btns = document.getElementById('quiz-opts').querySelectorAll('.quiz-opt-btn');
+  btns.forEach(function(b) { b.disabled = true; });
+  if (chosen === correct) {
+    btns[chosen].classList.add('q-correct');
+    document.getElementById('quiz-fb').textContent = '✦ Correct! Well done!';
+    quizState.score++;
+  } else {
+    btns[chosen].classList.add('q-wrong');
+    btns[correct].classList.add('q-correct');
+    document.getElementById('quiz-fb').textContent = '✗ Not quite. The correct answer is highlighted.';
+  }
+  document.getElementById('btn-next-q').classList.add('visible');
+}
+
+function nextQuizQ() {
+  quizState.current++;
+  if (quizState.current >= quizData.length) {
+    showScore();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showScore() {
+  document.getElementById('quiz-area').style.display = 'none';
+  var sb = document.getElementById('score-board');
+  sb.classList.add('visible');
+  var s = quizState.score;
+  var t = quizData.length;
+  document.getElementById('score-num').textContent = s;
+  document.getElementById('score-denom').textContent = '/ ' + t;
+
+  /* POLISH: star rating */
+  var stars = s >= 9 ? '⭐⭐⭐' : s >= 6 ? '⭐⭐' : '⭐';
+  document.getElementById('score-stars').textContent = stars;
+
+  var msgs = [
+    [0, 4,  'Keep Practising!',    'Review the introduction section and try again.'],
+    [5, 7,  'Good Effort!',         'You understand the basics. Review a few more concepts.'],
+    [8, 9,  'Well Done!',           'You have a strong understanding of symmetry!'],
+    [10, 10, 'Perfect Score! ✦',   'Outstanding! You are a symmetry expert!']
+  ];
+  var m = msgs[0];
+  for (var i = 0; i < msgs.length; i++) {
+    if (s >= msgs[i][0] && s <= msgs[i][1]) { m = msgs[i]; break; }
+  }
+  document.getElementById('score-msg').textContent = m[2];
+  document.getElementById('score-sub').textContent = m[3];
+}
+
+function restartQuiz() {
+  quizState = { current: 0, score: 0, answered: false, started: true };
+  document.getElementById('quiz-area').style.display = 'block';
+  document.getElementById('score-board').classList.remove('visible');
+  renderQuestion();
+}
+
+/* ══════════════════════════════
+   INIT
+══════════════════════════════ */
+window.addEventListener('load', function() {
+  initCanvas('hazhir');
+  initCanvas('aras');
+  updateProgress();
+});
+
+/* Prevent body scroll when touching canvases */
+document.body.addEventListener('touchmove', function(e) {
+  if (e.target.tagName === 'CANVAS') e.preventDefault();
+}, { passive: false });
+</script>
+</body>
+</html>
